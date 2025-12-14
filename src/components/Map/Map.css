@@ -1,0 +1,20 @@
+.map-container {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  z-index: 0;
+}
+
+.map-container .leaflet-container {
+  height: 100%;
+  width: 100%;
+  z-index: 0;
+}
+
+/* Стили для мобильных устройств */
+@media (max-width: 768px) {
+  .map-container {
+    touch-action: pan-x pan-y;
+  }
+}
+

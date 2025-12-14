@@ -1,0 +1,135 @@
+.point-info-panel {
+  padding: 20px;
+}
+
+.point-info-loading {
+  padding: 40px 20px;
+  text-align: center;
+  color: #666;
+  font-size: 16px;
+}
+
+.point-info-header {
+  margin-bottom: 16px;
+}
+
+.point-info-title {
+  font-size: 18px;
+  font-weight: 600;
+  color: #333;
+  margin: 0;
+}
+
+.point-info-content {
+  margin-bottom: 24px;
+}
+
+.point-info-name {
+  font-size: 16px;
+  font-weight: 500;
+  color: #333;
+  margin-bottom: 8px;
+}
+
+.point-info-address {
+  font-size: 14px;
+  color: #666;
+  margin-bottom: 8px;
+}
+
+.point-info-coordinates {
+  font-size: 12px;
+  color: #999;
+  font-family: monospace;
+}
+
+.point-info-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.point-info-action-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 12px 20px;
+  border: 1px solid #e0e0e0;
+  border-radius: 12px;
+  background: white;
+  color: #333;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.point-info-action-button:hover {
+  background: #f5f5f5;
+  border-color: #3b82f6;
+}
+
+.point-info-action-button:active {
+  transform: scale(0.98);
+}
+
+.point-info-action-button.primary {
+  background: #3b82f6;
+  color: white;
+  border-color: #3b82f6;
+}
+
+.point-info-action-button.primary:hover {
+  background: #2563eb;
+  border-color: #2563eb;
+}
+
+.point-info-action-row {
+  display: flex;
+  gap: 8px;
+}
+
+.point-info-action-row .point-info-action-button {
+  flex: 1;
+}
+
+.point-info-action-button svg {
+  width: 20px;
+  height: 20px;
+}
+
+/* Темная тема */
+@media (prefers-color-scheme: dark) {
+  .point-info-loading {
+    color: #999;
+  }
+
+  .point-info-title {
+    color: #ffffff;
+  }
+
+  .point-info-name {
+    color: #ffffff;
+  }
+
+  .point-info-address {
+    color: #999;
+  }
+
+  .point-info-coordinates {
+    color: #666;
+  }
+
+  .point-info-action-button {
+    background: #1c1c1e;
+    border-color: #2c2c2e;
+    color: #ffffff;
+  }
+
+  .point-info-action-button:hover {
+    background: #2c2c2e;
+    border-color: #3b82f6;
+  }
+}
+

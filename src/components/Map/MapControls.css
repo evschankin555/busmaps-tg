@@ -1,0 +1,54 @@
+.map-controls {
+  position: absolute;
+  bottom: 20px;
+  right: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  z-index: 1000;
+}
+
+.map-control-button {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: white;
+  border: none;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #333;
+  transition: all 0.2s;
+  touch-action: manipulation;
+}
+
+.map-control-button:hover {
+  background: #f5f5f5;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  transform: scale(1.05);
+}
+
+.map-control-button:active {
+  transform: scale(0.95);
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.15);
+}
+
+.map-control-button svg {
+  width: 24px;
+  height: 24px;
+}
+
+/* Темная тема */
+@media (prefers-color-scheme: dark) {
+  .map-control-button {
+    background: #1c1c1e;
+    color: #ffffff;
+  }
+
+  .map-control-button:hover {
+    background: #2c2c2e;
+  }
+}
+

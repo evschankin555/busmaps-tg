@@ -1,0 +1,28 @@
+.point-editing-panel {
+  padding: 20px;
+}
+
+.point-editing-header {
+  margin-bottom: 16px;
+}
+
+.point-editing-title {
+  font-size: 18px;
+  font-weight: 600;
+  color: #333;
+  margin: 0;
+}
+
+.point-editing-content {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* Темная тема */
+@media (prefers-color-scheme: dark) {
+  .point-editing-title {
+    color: #ffffff;
+  }
+}
+

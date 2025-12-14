@@ -1,0 +1,132 @@
+.route-header {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  padding: 12px 16px;
+  padding-top: calc(env(safe-area-inset-top, 0px) + 12px);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.route-header-points {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.route-header-point {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px;
+  border: none;
+  background: none;
+  text-align: left;
+  cursor: pointer;
+  border-radius: 8px;
+  transition: background-color 0.2s;
+  width: 100%;
+}
+
+.route-header-point:hover:not(:disabled) {
+  background-color: #f5f5f5;
+}
+
+.route-header-point:active:not(:disabled) {
+  background-color: #e0e0e0;
+}
+
+.route-header-point:disabled {
+  cursor: default;
+  opacity: 0.6;
+}
+
+.route-header-point-indicator {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.route-header-point-indicator.start {
+  background: #10b981;
+}
+
+.route-header-point-indicator.end {
+  background: #ef4444;
+}
+
+.route-header-point-content {
+  flex: 1;
+  min-width: 0;
+}
+
+.route-header-point-label {
+  font-size: 12px;
+  color: #666;
+  margin-bottom: 4px;
+}
+
+.route-header-point-value {
+  font-size: 14px;
+  font-weight: 500;
+  color: #333;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.route-header-point.active .route-header-point-value {
+  color: #3b82f6;
+}
+
+.route-header-point-arrow {
+  flex-shrink: 0;
+  color: #999;
+}
+
+.route-header-divider {
+  height: 1px;
+  background: #e0e0e0;
+  margin: 4px 0 4px 24px;
+}
+
+/* Темная тема */
+@media (prefers-color-scheme: dark) {
+  .route-header {
+    background: rgba(28, 28, 30, 0.95);
+  }
+
+  .route-header-point:hover:not(:disabled) {
+    background-color: #2c2c2e;
+  }
+
+  .route-header-point:active:not(:disabled) {
+    background-color: #3a3a3c;
+  }
+
+  .route-header-point-label {
+    color: #999;
+  }
+
+  .route-header-point-value {
+    color: #ffffff;
+  }
+
+  .route-header-point.active .route-header-point-value {
+    color: #3b82f6;
+  }
+
+  .route-header-point-arrow {
+    color: #666;
+  }
+
+  .route-header-divider {
+    background: #2c2c2e;
+  }
+}
+

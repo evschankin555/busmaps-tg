@@ -1,0 +1,18 @@
+.route-panel {
+  /* Стили наследуются от BottomPanel */
+}
+
+.route-panel-loading {
+  padding: 40px 20px;
+  text-align: center;
+  color: #666;
+  font-size: 16px;
+}
+
+/* Темная тема */
+@media (prefers-color-scheme: dark) {
+  .route-panel-loading {
+    color: #999;
+  }
+}
+
