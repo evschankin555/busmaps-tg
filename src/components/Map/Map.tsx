@@ -53,9 +53,18 @@ function MapController({ center, zoom, route }: { center?: LatLng; zoom?: number
 }
 
 function MapClickHandler({ onMapClick }: { onMapClick?: (latlng: LatLng) => void }) {
+  // #region agent log
+  fetch('http://127.0.0.1:7243/ingest/d8649f15-856d-44e5-9b57-dcabb0f6a1ef',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'Map.tsx:55',message:'MapClickHandler rendered',data:{hasOnMapClick:!!onMapClick},timestamp:Date.now(),sessionId:'debug-session',runId:'run1',hypothesisId:'A'})}).catch(()=>{});
+  // #endregion
   useMapEvents({
     click: (e) => {
+      // #region agent log
+      fetch('http://127.0.0.1:7243/ingest/d8649f15-856d-44e5-9b57-dcabb0f6a1ef',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'Map.tsx:59',message:'Map click event received',data:{lat:e.latlng.lat,lng:e.latlng.lng,hasOnMapClick:!!onMapClick},timestamp:Date.now(),sessionId:'debug-session',runId:'run1',hypothesisId:'A'})}).catch(()=>{});
+      // #endregion
       if (onMapClick) {
+        // #region agent log
+        fetch('http://127.0.0.1:7243/ingest/d8649f15-856d-44e5-9b57-dcabb0f6a1ef',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'Map.tsx:63',message:'Calling onMapClick',data:{lat:e.latlng.lat,lng:e.latlng.lng},timestamp:Date.now(),sessionId:'debug-session',runId:'run1',hypothesisId:'A'})}).catch(()=>{});
+        // #endregion
         onMapClick({ lat: e.latlng.lat, lng: e.latlng.lng });
       }
     },
@@ -73,6 +82,12 @@ export function Map({
   className = '',
 }: MapProps) {
   const defaultCenter = center;
+  
+  // #region agent log
+  React.useEffect(() => {
+    fetch('http://127.0.0.1:7243/ingest/d8649f15-856d-44e5-9b57-dcabb0f6a1ef',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'Map.tsx:75',message:'Map component rendered',data:{hasOnMapClick:!!onMapClick,markersCount:markers.length,hasRoute:!!route},timestamp:Date.now(),sessionId:'debug-session',runId:'run1',hypothesisId:'A'})}).catch(()=>{});
+  }, [onMapClick, markers.length, route]);
+  // #endregion
 
   return (
     <div className={`map-container ${className}`}>

@@ -42,6 +42,9 @@ function AppContent() {
 
   // Обновление маркеров на карте
   useEffect(() => {
+    // #region agent log
+    fetch('http://127.0.0.1:7243/ingest/d8649f15-856d-44e5-9b57-dcabb0f6a1ef',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'App.tsx:44',message:'Updating markers',data:{hasSelected:!!currentState.selectedPoint,hasStart:!!currentState.startPoint,hasEnd:!!currentState.endPoint},timestamp:Date.now(),sessionId:'debug-session',runId:'run1',hypothesisId:'E'})}).catch(()=>{});
+    // #endregion
     const markers: MapMarker[] = [];
     
     if (currentState.selectedPoint) {
@@ -68,33 +71,79 @@ function AppContent() {
       });
     }
     
+    // #region agent log
+    fetch('http://127.0.0.1:7243/ingest/d8649f15-856d-44e5-9b57-dcabb0f6a1ef',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'App.tsx:72',message:'Markers array created',data:{markerCount:markers.length,markerIds:markers.map(m=>m.id)},timestamp:Date.now(),sessionId:'debug-session',runId:'run1',hypothesisId:'E'})}).catch(()=>{});
+    // #endregion
     setMapMarkers(markers);
   }, [currentState.selectedPoint, currentState.startPoint, currentState.endPoint]);
 
   // Построение маршрута при изменении точек
   useEffect(() => {
+    // #region agent log
+    fetch('http://127.0.0.1:7243/ingest/d8649f15-856d-44e5-9b57-dcabb0f6a1ef',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'App.tsx:75',message:'Route planning effect triggered',data:{currentView:currentState.currentView,hasStart:!!currentState.startPoint,hasEnd:!!currentState.endPoint,startPoint:currentState.startPoint,endPoint:currentState.endPoint},timestamp:Date.now(),sessionId:'debug-session',runId:'run1',hypothesisId:'B'})}).catch(()=>{});
+    // #endregion
     if (currentState.currentView === AppViewState.ROUTE_PLANNING && currentState.startPoint && currentState.endPoint) {
+      // #region agent log
+      fetch('http://127.0.0.1:7243/ingest/d8649f15-856d-44e5-9b57-dcabb0f6a1ef',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'App.tsx:78',message:'Before calculateRoute',data:{start:currentState.startPoint,end:currentState.endPoint},timestamp:Date.now(),sessionId:'debug-session',runId:'run1',hypothesisId:'B'})}).catch(()=>{});
+      // #endregion
+      let cancelled = false;
       calculateRoute(currentState.startPoint, currentState.endPoint)
         .then((newRoute) => {
+          if (cancelled) return;
+          // #region agent log
+          fetch('http://127.0.0.1:7243/ingest/d8649f15-856d-44e5-9b57-dcabb0f6a1ef',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'App.tsx:84',message:'Route calculated successfully',data:{routeDistance:newRoute.distance,routeDuration:newRoute.duration,geometryLength:newRoute.geometry?.length},timestamp:Date.now(),sessionId:'debug-session',runId:'run1',hypothesisId:'B'})}).catch(()=>{});
+          // #endregion
           updateState({ route: newRoute });
         })
         .catch((error) => {
+          if (cancelled) return;
+          // #region agent log
+          fetch('http://127.0.0.1:7243/ingest/d8649f15-856d-44e5-9b57-dcabb0f6a1ef',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'App.tsx:90',message:'Route calculation error',data:{error:error instanceof Error?error.message:String(error),start:currentState.startPoint,end:currentState.endPoint},timestamp:Date.now(),sessionId:'debug-session',runId:'run1',hypothesisId:'B'})}).catch(()=>{});
+          // #endregion
           console.error('Ошибка построения маршрута:', error);
         });
+      return () => {
+        cancelled = true;
+      };
     }
   }, [currentState.currentView, currentState.startPoint, currentState.endPoint, calculateRoute, updateState]);
 
   const handleMapClick = useCallback((latlng: LatLng) => {
-    if (currentState.currentView === AppViewState.HOME || currentState.currentView === AppViewState.POINT_SELECTION) {
-      selectPoint(latlng);
-      goToPointSelection(latlng);
+    // #region agent log
+    fetch('http://127.0.0.1:7243/ingest/d8649f15-856d-44e5-9b57-dcabb0f6a1ef',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'App.tsx:87',message:'handleMapClick called',data:{latlng,currentView:currentState.currentView},timestamp:Date.now(),sessionId:'debug-session',runId:'run1',hypothesisId:'A'})}).catch(()=>{});
+    // #endregion
+    try {
+      if (currentState.currentView === AppViewState.HOME || currentState.currentView === AppViewState.POINT_SELECTION) {
+        // #region agent log
+        fetch('http://127.0.0.1:7243/ingest/d8649f15-856d-44e5-9b57-dcabb0f6a1ef',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'App.tsx:90',message:'Before selectPoint',data:{latlng},timestamp:Date.now(),sessionId:'debug-session',runId:'run1',hypothesisId:'A'})}).catch(()=>{});
+        // #endregion
+        selectPoint(latlng);
+        // #region agent log
+        fetch('http://127.0.0.1:7243/ingest/d8649f15-856d-44e5-9b57-dcabb0f6a1ef',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'App.tsx:93',message:'After selectPoint, before goToPointSelection',data:{latlng},timestamp:Date.now(),sessionId:'debug-session',runId:'run1',hypothesisId:'A'})}).catch(()=>{});
+        // #endregion
+        goToPointSelection(latlng);
+        // #region agent log
+        fetch('http://127.0.0.1:7243/ingest/d8649f15-856d-44e5-9b57-dcabb0f6a1ef',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'App.tsx:96',message:'After goToPointSelection',data:{latlng},timestamp:Date.now(),sessionId:'debug-session',runId:'run1',hypothesisId:'A'})}).catch(()=>{});
+        // #endregion
+      }
+    } catch (error) {
+      // #region agent log
+      fetch('http://127.0.0.1:7243/ingest/d8649f15-856d-44e5-9b57-dcabb0f6a1ef',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'App.tsx:99',message:'Error in handleMapClick',data:{error:error instanceof Error?error.message:String(error),latlng},timestamp:Date.now(),sessionId:'debug-session',runId:'run1',hypothesisId:'A'})}).catch(()=>{});
+      // #endregion
+      console.error('Ошибка в handleMapClick:', error);
     }
   }, [currentState.currentView, selectPoint, goToPointSelection]);
 
   const handleMyLocation = useCallback(() => {
+    // #region agent log
+    fetch('http://127.0.0.1:7243/ingest/d8649f15-856d-44e5-9b57-dcabb0f6a1ef',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'App.tsx:137',message:'handleMyLocation called',data:{hasGeolocation:!!navigator.geolocation},timestamp:Date.now(),sessionId:'debug-session',runId:'run1',hypothesisId:'A'})}).catch(()=>{});
+    // #endregion
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
         (position) => {
+          // #region agent log
+          fetch('http://127.0.0.1:7243/ingest/d8649f15-856d-44e5-9b57-dcabb0f6a1ef',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'App.tsx:142',message:'Geolocation success',data:{lat:position.coords.latitude,lng:position.coords.longitude},timestamp:Date.now(),sessionId:'debug-session',runId:'run1',hypothesisId:'A'})}).catch(()=>{});
+          // #endregion
           const loc: LatLng = {
             lat: position.coords.latitude,
             lng: position.coords.longitude,
@@ -104,9 +153,38 @@ function AppContent() {
           goToPointSelection(loc);
         },
         (error) => {
+          // #region agent log
+          fetch('http://127.0.0.1:7243/ingest/d8649f15-856d-44e5-9b57-dcabb0f6a1ef',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'App.tsx:152',message:'Geolocation error',data:{code:error.code,message:error.message},timestamp:Date.now(),sessionId:'debug-session',runId:'run1',hypothesisId:'A'})}).catch(()=>{});
+          // #endregion
           console.error('Ошибка получения местоположения:', error);
+          // Показываем пользователю понятное сообщение
+          const tg = window.Telegram?.WebApp;
+          if (tg) {
+            let errorMessage = 'Не удалось получить местоположение';
+            if (error.code === 1) {
+              errorMessage = 'Доступ к геолокации запрещен. Разрешите доступ в настройках браузера.';
+            } else if (error.code === 2) {
+              errorMessage = 'Местоположение недоступно';
+            } else if (error.code === 3) {
+              errorMessage = 'Превышено время ожидания';
+            }
+            tg.showAlert(errorMessage);
+          }
+        },
+        {
+          enableHighAccuracy: true,
+          timeout: 10000,
+          maximumAge: 0,
         }
       );
+    } else {
+      // #region agent log
+      fetch('http://127.0.0.1:7243/ingest/d8649f15-856d-44e5-9b57-dcabb0f6a1ef',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'App.tsx:169',message:'Geolocation not supported',data:{},timestamp:Date.now(),sessionId:'debug-session',runId:'run1',hypothesisId:'A'})}).catch(()=>{});
+      // #endregion
+      const tg = window.Telegram?.WebApp;
+      if (tg) {
+        tg.showAlert('Геолокация не поддерживается в вашем браузере');
+      }
     }
   }, [selectPoint, goToPointSelection]);
 

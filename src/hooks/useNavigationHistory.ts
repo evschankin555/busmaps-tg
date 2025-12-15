@@ -24,31 +24,44 @@ export function useNavigationHistory(initialState: AppState) {
   }, [history]);
 
   const pushState = useCallback((newView: AppViewState, newState: Partial<AppState>) => {
-    // Сохраняем текущее состояние в историю
-    const entry: NavigationHistoryEntry = {
-      view: currentState.currentView,
-      state: {
-        selectedPoint: currentState.selectedPoint,
-        route: currentState.route,
-        editingPointType: currentState.editingPointType,
-        searchQuery: currentState.searchQuery,
-        startPoint: currentState.startPoint,
-        endPoint: currentState.endPoint,
-      },
-      timestamp: Date.now(),
-    };
+    // #region agent log
+    fetch('http://127.0.0.1:7243/ingest/d8649f15-856d-44e5-9b57-dcabb0f6a1ef',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'useNavigationHistory.ts:26',message:'pushState called',data:{newView,newState,currentView:currentState.currentView,historyLength:history.length},timestamp:Date.now(),sessionId:'debug-session',runId:'run1',hypothesisId:'C'})}).catch(()=>{});
+    // #endregion
+    try {
+      // Сохраняем текущее состояние в историю
+      const entry: NavigationHistoryEntry = {
+        view: currentState.currentView,
+        state: {
+          selectedPoint: currentState.selectedPoint,
+          route: currentState.route,
+          editingPointType: currentState.editingPointType,
+          searchQuery: currentState.searchQuery,
+          startPoint: currentState.startPoint,
+          endPoint: currentState.endPoint,
+        },
+        timestamp: Date.now(),
+      };
 
-    setHistory(prev => [...prev, entry]);
-    
-    // Обновляем текущее состояние
-    setCurrentState(prev => ({
-      ...prev,
-      currentView: newView,
-      ...newState,
-    }));
+      setHistory(prev => [...prev, entry]);
+      
+      // Обновляем текущее состояние
+      setCurrentState(prev => ({
+        ...prev,
+        currentView: newView,
+        ...newState,
+      }));
 
-    // Обновляем browser history
-    window.history.pushState({ view: newView, state: newState }, '', window.location.href);
+      // Обновляем browser history
+      window.history.pushState({ view: newView, state: newState }, '', window.location.href);
+      // #region agent log
+      fetch('http://127.0.0.1:7243/ingest/d8649f15-856d-44e5-9b57-dcabb0f6a1ef',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'useNavigationHistory.ts:52',message:'pushState completed',data:{newView},timestamp:Date.now(),sessionId:'debug-session',runId:'run1',hypothesisId:'C'})}).catch(()=>{});
+      // #endregion
+    } catch (error) {
+      // #region agent log
+      fetch('http://127.0.0.1:7243/ingest/d8649f15-856d-44e5-9b57-dcabb0f6a1ef',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'useNavigationHistory.ts:55',message:'pushState error',data:{error:error instanceof Error?error.message:String(error),newView},timestamp:Date.now(),sessionId:'debug-session',runId:'run1',hypothesisId:'C'})}).catch(()=>{});
+      // #endregion
+      console.error('Ошибка в pushState:', error);
+    }
   }, [currentState]);
 
   const popState = useCallback(() => {
