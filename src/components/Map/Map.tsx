@@ -7,12 +7,14 @@ import { MapMarker } from '../../types/map';
 import './Map.css';
 
 // Фикс для иконок маркеров в React-Leaflet
-delete (L.Icon.Default.prototype as any)._getIconUrl;
-L.Icon.Default.mergeOptions({
-  iconRetinaUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/images/marker-icon-2x.png',
-  iconUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/images/marker-icon.png',
-  shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/images/marker-shadow.png',
-});
+if (typeof window !== 'undefined') {
+  delete (L.Icon.Default.prototype as any)._getIconUrl;
+  L.Icon.Default.mergeOptions({
+    iconRetinaUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/images/marker-icon-2x.png',
+    iconUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/images/marker-icon.png',
+    shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/images/marker-shadow.png',
+  });
+}
 
 interface MapProps {
   center?: LatLng;
@@ -35,8 +37,12 @@ function MapController({ center, zoom, route }: { center?: LatLng; zoom?: number
 
   useEffect(() => {
     if (route && route.length > 0) {
-      const bounds = L.latLngBounds(route);
-      map.fitBounds(bounds, { padding: [50, 50] });
+      try {
+        const bounds = L.latLngBounds(route.map(p => [p.lat, p.lng] as [number, number]));
+        map.fitBounds(bounds, { padding: [50, 50] });
+      } catch (error) {
+        console.error('Ошибка установки границ карты:', error);
+      }
     }
   }, [route, map]);
 

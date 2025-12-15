@@ -30,24 +30,44 @@ export function NavigationProvider({ children }: { children: React.ReactNode }) 
   // Интеграция с Telegram BackButton
   useEffect(() => {
     const tg = window.Telegram?.WebApp;
-    if (tg) {
-      if (canGoBack) {
-        tg.BackButton.show();
-      } else {
-        tg.BackButton.hide();
-      }
-
-      const handleBackButton = () => {
-        if (!popState()) {
-          // Если не можем вернуться назад, закрываем приложение
-          tg.close();
+    if (tg && tg.BackButton) {
+      // Проверяем, поддерживается ли BackButton (доступен с версии 6.1+)
+      // Проверяем наличие методов show/hide
+      if (typeof tg.BackButton.show === 'function' && typeof tg.BackButton.hide === 'function') {
+        if (canGoBack) {
+          try {
+            tg.BackButton.show();
+          } catch (error) {
+            console.warn('BackButton.show() не поддерживается в этой версии Telegram WebApp');
+          }
+        } else {
+          try {
+            tg.BackButton.hide();
+          } catch (error) {
+            console.warn('BackButton.hide() не поддерживается в этой версии Telegram WebApp');
+          }
         }
-      };
 
-      tg.BackButton.onClick(handleBackButton);
-      return () => {
-        tg.BackButton.offClick(handleBackButton);
-      };
+        const handleBackButton = () => {
+          if (!popState()) {
+            // Если не можем вернуться назад, закрываем приложение
+            tg.close();
+          }
+        };
+
+        try {
+          tg.BackButton.onClick(handleBackButton);
+          return () => {
+            try {
+              tg.BackButton.offClick(handleBackButton);
+            } catch (error) {
+              // Игнорируем ошибки при очистке
+            }
+          };
+        } catch (error) {
+          console.warn('BackButton.onClick() не поддерживается в этой версии Telegram WebApp');
+        }
+      }
     }
   }, [canGoBack, popState]);
 

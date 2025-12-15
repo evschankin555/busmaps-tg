@@ -1,5 +1,4 @@
 import { useEffect, useState, useCallback } from 'react';
-import { init } from '@twa-dev/sdk';
 import { NavigationProvider, useNavigation } from './context/NavigationContext';
 import { useAppState } from './hooks/useAppState';
 import { AppViewState } from './state/AppState';
@@ -40,10 +39,6 @@ function AppContent() {
 
   const [currentLocation, setCurrentLocation] = useState<LatLng | null>(null);
   const [mapMarkers, setMapMarkers] = useState<MapMarker[]>([]);
-
-  useEffect(() => {
-    init();
-  }, []);
 
   // Обновление маркеров на карте
   useEffect(() => {
