@@ -31,21 +31,15 @@ export function NavigationProvider({ children }: { children: React.ReactNode }) 
   useEffect(() => {
     const tg = window.Telegram?.WebApp;
     if (tg && tg.BackButton) {
-      // Проверяем, поддерживается ли BackButton (доступен с версии 6.1+)
-      // Проверяем наличие методов show/hide
-      if (typeof tg.BackButton.show === 'function' && typeof tg.BackButton.hide === 'function') {
+      // Проверяем версию - BackButton поддерживается с версии 6.1+
+      const version = parseFloat(tg.version || '0');
+      const isBackButtonSupported = version >= 6.1;
+      
+      if (isBackButtonSupported && typeof tg.BackButton.show === 'function' && typeof tg.BackButton.hide === 'function') {
         if (canGoBack) {
-          try {
-            tg.BackButton.show();
-          } catch (error) {
-            console.warn('BackButton.show() не поддерживается в этой версии Telegram WebApp');
-          }
+          tg.BackButton.show();
         } else {
-          try {
-            tg.BackButton.hide();
-          } catch (error) {
-            console.warn('BackButton.hide() не поддерживается в этой версии Telegram WebApp');
-          }
+          tg.BackButton.hide();
         }
 
         const handleBackButton = () => {
@@ -55,18 +49,10 @@ export function NavigationProvider({ children }: { children: React.ReactNode }) 
           }
         };
 
-        try {
-          tg.BackButton.onClick(handleBackButton);
-          return () => {
-            try {
-              tg.BackButton.offClick(handleBackButton);
-            } catch (error) {
-              // Игнорируем ошибки при очистке
-            }
-          };
-        } catch (error) {
-          console.warn('BackButton.onClick() не поддерживается в этой версии Telegram WebApp');
-        }
+        tg.BackButton.onClick(handleBackButton);
+        return () => {
+          tg.BackButton.offClick(handleBackButton);
+        };
       }
     }
   }, [canGoBack, popState]);

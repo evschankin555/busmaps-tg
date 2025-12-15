@@ -38,8 +38,11 @@ function MapController({ center, zoom, route }: { center?: LatLng; zoom?: number
   useEffect(() => {
     if (route && route.length > 0) {
       try {
-        const bounds = L.latLngBounds(route.map(p => [p.lat, p.lng] as [number, number]));
-        map.fitBounds(bounds, { padding: [50, 50] });
+        const latlngs = route.map(p => [p.lat, p.lng] as [number, number]);
+        if (latlngs.length > 0) {
+          const bounds = L.latLngBounds(latlngs);
+          map.fitBounds(bounds, { padding: [50, 50] });
+        }
       } catch (error) {
         console.error('Ошибка установки границ карты:', error);
       }
